@@ -74,6 +74,31 @@ c2 = Customer(first_name='Scott',
               email='scottharvey@example.com')
 session.add(c2)
 session.commit()
+#Insert more customers
+c3 = Customer(
+    first_name="John",
+    last_name="Lara",
+    username="johnlara",
+    email="johnlara@mail.com")
+
+c4 = Customer(
+    first_name="Sarah",
+    last_name="Tomlin",
+    username="sarahtomlin",
+    email="sarahtomlin@mail.com")
+
+c5 = Customer(first_name='Toby',
+              last_name='Miller',
+              username='tmiller',
+              email='tmiller@example.com')
+
+c6 = Customer(first_name='Scott',
+              last_name='Harvey',
+              username='scottharvey',
+              email='scottharvey@example.com')
+
+session.add_all([c3, c4, c5, c6])
+session.commit()
 # Insert a Person in the person table
 new_person1 = Person(name='Keith')
 session.add(new_person1)

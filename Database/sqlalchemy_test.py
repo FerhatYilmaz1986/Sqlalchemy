@@ -47,6 +47,28 @@ class Customer(Base):
     created_on = Column(DateTime(), default=datetime.now)
     updated_on = Column(DateTime(), default=datetime.now, onupdate=datetime.now)
 
+
+class Item(Base):
+    __tablename__ = 'items'
+    id = Column(Integer(), primary_key=True)
+    name = Column(String(200), nullable=False)
+    cost_price =  Column(Numeric(10, 2), nullable=False)
+    selling_price = Column(Numeric(10, 2),  nullable=False)
+
+
+class Order(Base):
+    __tablename__ = 'orders'
+    id = Column(Integer(), primary_key=True)
+    customer_id = Column(Integer(), ForeignKey('customers.id'))
+    date_placed = Column(DateTime(), default=datetime.now)
+
+class OrderLine(Base):
+    __tablename__ = 'order_lines'
+    id = Column(Integer(), primary_key=True)
+    order_id = Column(Integer(), ForeignKey('orders.id'))
+    item_id = Column(Integer(), ForeignKey('items.id'))
+    quantity = Column(SmallInteger())
+
 # Create all tables in the engine. This is equivalent to "Create Table"
 # statements in raw SQL.
 Base.metadata.create_all(engine)
@@ -98,6 +120,19 @@ c6 = Customer(first_name='Scott',
               email='scottharvey@example.com')
 
 session.add_all([c3, c4, c5, c6])
+session.commit()
+
+#Create some products
+i1 = Item(name='Chair', cost_price=9.21, selling_price=10.81)
+i2 = Item(name='Pen', cost_price=3.45, selling_price=4.51)
+i3 = Item(name='Headphone', cost_price=15.52, selling_price=16.81)
+i4 = Item(name='Travel Bag', cost_price=20.1, selling_price=24.21)
+i5 = Item(name='Keyboard', cost_price=20.1, selling_price=22.11)
+i6 = Item(name='Monitor', cost_price=200.14, selling_price=212.89)
+i7 = Item(name='Watch', cost_price=100.58, selling_price=104.41)
+i8 = Item(name='Water Bottle', cost_price=20.89, selling_price=25)
+
+session.add_all([i1, i2, i3, i4, i5, i6, i7, i8])
 session.commit()
 # Insert a Person in the person table
 new_person1 = Person(name='Keith')

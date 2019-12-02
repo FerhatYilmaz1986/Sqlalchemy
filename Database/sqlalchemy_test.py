@@ -46,6 +46,7 @@ class Customer(Base):
     email = Column(String(200), nullable=False)
     created_on = Column(DateTime(), default=datetime.now)
     updated_on = Column(DateTime(), default=datetime.now, onupdate=datetime.now)
+    orders = relationship("Order", backref='customer')
 
 
 class Item(Base):
@@ -54,13 +55,7 @@ class Item(Base):
     name = Column(String(200), nullable=False)
     cost_price =  Column(Numeric(10, 2), nullable=False)
     selling_price = Column(Numeric(10, 2),  nullable=False)
-
-
-class Order(Base):
-    __tablename__ = 'orders'
-    id = Column(Integer(), primary_key=True)
-    customer_id = Column(Integer(), ForeignKey('customers.id'))
-    date_placed = Column(DateTime(), default=datetime.now)
+    #orders = relationship("Order", backref='customer')
 
 class OrderLine(Base):
     __tablename__ = 'order_lines'
@@ -68,6 +63,13 @@ class OrderLine(Base):
     order_id = Column(Integer(), ForeignKey('orders.id'))
     item_id = Column(Integer(), ForeignKey('items.id'))
     quantity = Column(SmallInteger())
+    item = relationship("Item")
+
+class Order(Base):
+    __tablename__ = 'orders'
+    id = Column(Integer(), primary_key=True)
+    customer_id = Column(Integer(), ForeignKey('customers.id'))
+    date_placed = Column(DateTime(), default=datetime.now)
 
 # Create all tables in the engine. This is equivalent to "Create Table"
 # statements in raw SQL.
@@ -134,6 +136,8 @@ i8 = Item(name='Water Bottle', cost_price=20.89, selling_price=25)
 
 session.add_all([i1, i2, i3, i4, i5, i6, i7, i8])
 session.commit()
+
+
 # Insert a Person in the person table
 new_person1 = Person(name='Keith')
 session.add(new_person1)
@@ -174,3 +178,28 @@ all_addresses = session.query(Address).join(Person).all()
 for address in all_addresses:
     # showing how to use the print function with printing text and data at the same time easily
     print(f'{address.person.name} has a postal code of {address.post_code}')
+
+#Query data
+print(session.query(Customer))
+q = session.query(Customer)
+
+for c in q:
+    print(c.id, c.first_name)
+
+session.query(Customer.id, Customer.first_name).all()
+
+session.query(Customer).count()
+session.query(Item).count()
+session.query(Order).count()
+
+session.query(Customer).first()
+session.query(Item).first()
+session.query(Order).first()
+
+session.query(Customer).get(1)
+session.query(Item).get(1)
+session.query(Order).get(100)
+
+session.query(Customer).filter(Customer.first_name == 'John').all()
+print(session.query(Customer).filter(Customer.first_name == 'John'))
+session.query(Customer).filter(Customer.id <= 5).all()

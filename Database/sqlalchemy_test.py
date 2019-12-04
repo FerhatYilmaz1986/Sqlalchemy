@@ -299,3 +299,6 @@ session.commit()
 i = session.query(Item).filter(Item.name == 'Monitor').one()
 session.delete(i)
 session.commit()
+
+dispatch_order(1)
+dispatch_order(2)

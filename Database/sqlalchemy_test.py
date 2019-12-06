@@ -285,3 +285,39 @@ session.query(
     Customer.last_name == 'Green',
     Order.id == 1,
 ).all()
+#OUTER JOIN (full outer join is not supported)
+session.query(        
+    Customer.first_name,
+    Order.id,
+).outerjoin(Order).all()
+#GROUP BY
+from sqlalchemy import func
+ 
+session.query(func.count(Customer.id)).join(Order).filter(
+    Customer.first_name == 'John',
+    Customer.last_name == 'Green',    
+).group_by(Customer.id).scalar()
+#HAVING
+session.query(
+    func.count("*").label('town_count'),    
+    Customer.town
+).group_by(Customer.town).having(func.count("*") > 2).all()
+#DUPLICATES
+from sqlalchemy import distinct
+ 
+session.query(Customer.town).filter(Customer.id  < 10).all()
+session.query(Customer.town).filter(Customer.id  < 10).distinct().all()
+ 
+session.query(        
+    func.count(distinct(Customer.town)),
+    func.count(Customer.town)
+).all()
+#UNIONS
+s1 = session.query(Item.id, Item.name).filter(Item.name.like("Wa%"))
+s2 = session.query(Item.id, Item.name).filter(Item.name.like("%e%"))
+s1.union(s2).all()
+#UPDATING DATA
+i = session.query(Item).get(8)
+i.selling_price = 25.91
+session.add(i)
+session.commit()

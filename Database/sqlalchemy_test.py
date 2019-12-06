@@ -261,3 +261,27 @@ session.query(Item).filter(not_(Item.cost_price.between(10, 50))).all()
 session.query(Item).filter(Item.name.like("%r")).all()
 #NOT LIKE
 session.query(Item).filter(not_(Item.name.like("W%"))).all()
+#LIMIT
+session.query(Customer).limit(2).all()
+session.query(Customer).filter(Customer.address.ilike("%avenue")).limit(2).all()
+print(session.query(Customer).limit(2))
+print(session.query(Customer).filter(Customer.address.ilike("%avenue")).limit(2))
+#OFFSET
+session.query(Customer).limit(2).offset(2).all()
+print(session.query(Customer).limit(2).offset(2))
+#ORDER BY
+session.query(Item).filter(Item.name.ilike("wa%")).all()
+session.query(Item).filter(Item.name.ilike("wa%")).order_by(Item.cost_price).all()
+#JOIN
+session.query(Customer).join(Order).all()
+print(session.query(Customer).join(Order))
+session.query(
+    Customer.first_name, 
+    Item.name, 
+    Item.selling_price, 
+    OrderLine.quantity
+).join(Order).join(OrderLine).join(Item).filter(
+    Customer.first_name == 'John',
+    Customer.last_name == 'Green',
+    Order.id == 1,
+).all()

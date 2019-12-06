@@ -253,3 +253,11 @@ session.query(Order).filter(Order.date_shipped != None).all()
 session.query(Customer).filter(Customer.first_name.in_(['Toby', 'Sarah'])).all()
 #NOT IN
 session.query(Customer).filter(Customer.first_name.notin_(['Toby', 'Sarah'])).all()
+#BETWEEN
+session.query(Item).filter(Item.cost_price.between(10, 50)).all()
+#NOT BETWEEN
+session.query(Item).filter(not_(Item.cost_price.between(10, 50))).all()
+#LIKE
+session.query(Item).filter(Item.name.like("%r")).all()
+#NOT LIKE
+session.query(Item).filter(not_(Item.name.like("W%"))).all()

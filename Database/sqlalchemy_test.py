@@ -157,3 +157,40 @@ c6 = Customer(first_name='Scott',
 
 session.add_all([c3, c4, c5, c6])
 session.commit()
+
+#Add order data
+o1 = Order(customer=c1)
+o2 = Order(customer=c1)
+
+line_item1 = OrderLine(order=o1, item=i1, quantity=3)
+line_item2 = OrderLine(order=o1, item=i2, quantity=2)
+line_item3 = OrderLine(order=o2, item=i1, quantity=1)
+line_item3 = OrderLine(order=o2, item=i2, quantity=4)
+
+session.add_all([o1, o2])
+
+session.new
+session.commit()
+o3 = Order(customer=c1)
+orderline1 = OrderLine(item=i1, quantity=5)
+orderline2 = OrderLine(item=i2, quantity=10)
+
+o3.order_lines.append(orderline1)
+o3.order_lines.append(orderline2)
+
+session.add_all([o3])
+
+session.commit()
+c1.orders
+o1.customer
+for ol in c1.orders[0].order_lines:
+    ol.id, ol.item, ol.quantity
+
+print('-------')
+
+for ol in c1.orders[1].order_lines:
+    ol.id, ol.item, ol.quantity
+    
+
+session.query(Item).filter(Item.name.ilike("wa%")).all()
+session.query(Item).filter(Item.name.ilike("wa%")).order_by(Item.cost_price).all()

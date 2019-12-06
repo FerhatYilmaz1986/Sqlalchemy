@@ -321,3 +321,23 @@ i = session.query(Item).get(8)
 i.selling_price = 25.91
 session.add(i)
 session.commit()
+#DELETING DATA
+i = session.query(Item).filter(Item.name == 'Monitor').one()
+i
+session.delete(i)
+session.commit()
+session.query(Item).filter(
+    Item.name.ilike("W%")
+).delete(synchronize_session='fetch')
+session.commit()
+#RAW QUERIES
+from sqlalchemy import text
+ 
+session.query(Customer).filter(text("first_name = 'John'")).all()
+ 
+session.query(Customer).filter(text("town like 'Nor%'")).all()
+ 
+session.query(Customer).filter(text("town like 'Nor%'")).order_by(text("first_name, id desc")).all()
+#TRANSACTIONS
+dispatch_order(1)
+dispatch_order(2)

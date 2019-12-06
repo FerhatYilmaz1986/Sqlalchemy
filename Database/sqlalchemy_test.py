@@ -194,3 +194,14 @@ for ol in c1.orders[1].order_lines:
 
 session.query(Item).filter(Item.name.ilike("wa%")).all()
 session.query(Item).filter(Item.name.ilike("wa%")).order_by(Item.cost_price).all()
+
+#Querrying Data
+session.query(Customer).all()
+session.query(Item).all()
+session.query(Order).all()
+print(session.query(Customer))
+q = session.query(Customer)
+ 
+for c in q:
+    print(c.id, c.first_name)
+session.query(Customer.id, Customer.first_name).all()
